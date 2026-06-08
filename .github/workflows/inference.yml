@@ -1,16 +1,10 @@
 name: Manual Inference Test
 
 on:
-  workflow_dispatch:
-    inputs:
-      text:
-        description: 'Text to classify'
-        required: true
-        default: 'Stock market rallied today'
-      model:
-        description: 'Model to use'
-        required: true
-        default: 'YuvarajK-g25ait2054/ag-news-distilbert'
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
 
 jobs:
   inference:
@@ -29,11 +23,10 @@ jobs:
       run: |
         pip install transformers torch scikit-learn
     
-    - name: Run inference
+    - name: Run inference with default values
       run: |
-        echo "Text: ${{ github.event.inputs.text || 'Stock market rallied today' }}"
-        echo "Model: ${{ github.event.inputs.model || 'YuvarajK-g25ait2054/ag-news-distilbert' }}"
-        python inference.py --text "${{ github.event.inputs.text || 'Stock market rallied today' }}" --model "${{ github.event.inputs.model || 'YuvarajK-g25ait2054/ag-news-distilbert' }}"
+        echo "Running inference with default model and text..."
+        python inference.py --text "Stock market rallied today on strong earnings reports" --model "YuvarajK-g25ait2054/ag-news-distilbert"
     
     - name: Show result
       run: |
