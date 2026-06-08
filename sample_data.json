@@ -1,0 +1,28 @@
+{
+  "samples": [
+    {
+      "text": "Apple Inc. announced record quarterly profits driven by strong iPhone sales and growing services revenue.",
+      "expected_category": "Business"
+    },
+    {
+      "text": "NASA's James Webb Space Telescope captures stunning images of distant galaxies forming in the early universe.",
+      "expected_category": "Sci/Tech"
+    },
+    {
+      "text": "The Lakers defeated the Warriors 118-112 in overtime, with LeBron James scoring 35 points.",
+      "expected_category": "Sports"
+    },
+    {
+      "text": "United Nations Security Council holds emergency meeting to discuss the escalating conflict in the Middle East.",
+      "expected_category": "World"
+    },
+    {
+      "text": "Federal Reserve raises interest rates by 0.25% to combat persistent inflation concerns.",
+      "expected_category": "Business"
+    },
+    {
+      "text": "Researchers develop new AI model that can predict protein structures with 90% accuracy.",
+      "expected_category": "Sci/Tech"
+    }
+  ]
+}

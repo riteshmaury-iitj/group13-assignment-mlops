@@ -1,0 +1,34 @@
+name: Manual Inference Test
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  inference:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install transformers torch scikit-learn
+    
+    - name: Run inference with default values
+      run: |
+        echo "Running inference with default model and text..."
+        python inference.py --text "Stock market rallied today on strong earnings reports" --model "YuvarajK-g25ait2054/ag-news-distilbert"
+    
+    - name: Show result
+      run: |
+        echo "Classification completed!"
+        cat inference_result.json || echo "No result file generated"
