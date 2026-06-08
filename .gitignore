@@ -142,7 +142,14 @@ dmypy.json
 data/raw/
 data/processed/
 *.csv
-*.json
+
+# Exclude large JSON files but keep config files
+dataset/*.json
+wandb/*.json
+# Allow small config JSON files in root
+!id2label.json
+!sample_data.json
+!package.json
 
 # Model files
 models/*.pkl
