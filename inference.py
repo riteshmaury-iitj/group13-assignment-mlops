@@ -50,7 +50,7 @@ def classify_text(text, model_name, id2label):
 def main():
     parser = argparse.ArgumentParser(description="AG News classifier")
     parser.add_argument("--text", type=str, required=True, help="text to classify")
-    parser.add_argument("--model", type=str, default="Recurrent/ag-news-distilbert", 
+    parser.add_argument("--model", type=str, default="YuvarajK-g25ait2054/ag-news-distilbert", 
                        help="model name")
     parser.add_argument("--labels", type=str, default="id2label.json", 
                        help="label file")
