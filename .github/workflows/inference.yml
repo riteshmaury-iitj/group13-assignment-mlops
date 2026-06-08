@@ -1,0 +1,39 @@
+name: Manual Inference Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      text:
+        description: 'Text to classify'
+        required: true
+        default: 'Stock market rallied today'
+      model:
+        description: 'Model to use'
+        required: true
+        default: 'YuvarajK-g25ait2054/ag-news-distilbert'
+
+jobs:
+  inference:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install transformers torch scikit-learn
+    
+    - name: Run inference
+      run: |
+        python inference.py --text "${{ github.event.inputs.text }}" --model "${{ github.event.inputs.model }}"
+    
+    - name: Show result
+      run: |
+        echo "Classification completed!"
+        cat inference_result.json || echo "No result file generated"
