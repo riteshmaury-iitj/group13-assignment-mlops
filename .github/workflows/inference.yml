@@ -13,7 +13,7 @@ on:
         default: 'YuvarajK-g25ait2054/ag-news-distilbert'
   push:
     branches:
-      - never-trigger-this
+      - develop
 
 jobs:
   inference:
