@@ -7,51 +7,44 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 # categories: world, sports, business, sci/tech
 
 def classify_text(text, model_name, id2label):
-    # classify news article using the model
+    # load stuff
+    tok = AutoTokenizer.from_pretrained(model_name)
+    mdl = AutoModelForSequenceClassification.from_pretrained(model_name)
     
-    # Load model and tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForSequenceClassification.from_pretrained(model_name)
+    # gpu check
+    dev = "cuda" if torch.cuda.is_available() else "cpu"
+    mdl.to(dev)
+    mdl.eval()
     
-    # Move to GPU if available
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    model.to(device)
-    model.eval()
+    # tokenize
+    inp = tok(text, return_tensors="pt", truncation=True, max_length=128)
     
-    # Tokenize input (no token_type_ids for DistilBERT)
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=128)
+    # distilbert doesnt need token_type_ids
+    if 'token_type_ids' in inp:
+        del inp['token_type_ids']
     
-    # Remove token_type_ids if present (DistilBERT doesn't use them)
-    if 'token_type_ids' in inputs:
-        del inputs['token_type_ids']
+    inp = {k: v.to(dev) for k, v in inp.items()}
     
-    inputs = {k: v.to(device) for k, v in inputs.items()}
-    
-    # Run inference
+    # predict
     with torch.no_grad():
-        outputs = model(**inputs)
-        probs = torch.nn.functional.softmax(outputs.logits, dim=-1)[0]
+        out = mdl(**inp)
+        probs = torch.nn.functional.softmax(out.logits, dim=-1)[0]
     
-    # Get all predictions
-    mapped_results = []
-    for idx, prob in enumerate(probs):
-        cat_name = id2label.get(str(idx), "unknown")
-        mapped_results.append({
-            "category": cat_name,
-            "confidence": float(prob)
-        })
+    # make results list
+    results = []
+    for i, p in enumerate(probs):
+        cat = id2label.get(str(i), "unknown")
+        results.append({"category": cat, "confidence": float(p)})
     
-    # sort by confidence
-    mapped_results = sorted(mapped_results, key=lambda x: x['confidence'], reverse=True)
+    # sort
+    results = sorted(results, key=lambda x: x['confidence'], reverse=True)
     
-    output = {
+    return {
         "text": text,
-        "prediction": mapped_results[0]['category'],
-        "confidence": mapped_results[0]['confidence'],
-        "all_scores": mapped_results
+        "prediction": results[0]['category'],
+        "confidence": results[0]['confidence'],
+        "all_scores": results
     }
-    
-    return output
 
 
 def main():
