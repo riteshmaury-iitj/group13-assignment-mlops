@@ -11,9 +11,6 @@ on:
         description: 'Model to use'
         required: true
         default: 'YuvarajK-g25ait2054/ag-news-distilbert'
-  push:
-    branches:
-      - develop
 
 jobs:
   inference:
