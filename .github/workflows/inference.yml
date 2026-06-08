@@ -31,7 +31,9 @@ jobs:
     
     - name: Run inference
       run: |
-        python inference.py --text "${{ github.event.inputs.text }}" --model "${{ github.event.inputs.model }}"
+        echo "Text: ${{ github.event.inputs.text || 'Stock market rallied today' }}"
+        echo "Model: ${{ github.event.inputs.model || 'YuvarajK-g25ait2054/ag-news-distilbert' }}"
+        python inference.py --text "${{ github.event.inputs.text || 'Stock market rallied today' }}" --model "${{ github.event.inputs.model || 'YuvarajK-g25ait2054/ag-news-distilbert' }}"
     
     - name: Show result
       run: |
