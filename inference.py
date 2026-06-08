@@ -1,7 +1,7 @@
 import argparse
 import json
 import torch
-from transformers import pipeline
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # inference script for ag news classification
 # categories: world, sports, business, sci/tech
@@ -9,27 +9,36 @@ from transformers import pipeline
 def classify_text(text, model_name, id2label):
     # classify news article using the model
     
-    # setup pipeline
-    device_num = 0 if torch.cuda.is_available() else -1
-    classifier = pipeline(
-        "text-classification",
-        model=model_name,
-        tokenizer=model_name,
-        device=device_num,
-        return_all_scores=True
-    )
+    # Load model and tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForSequenceClassification.from_pretrained(model_name)
     
-    # get predictions
-    results = classifier(text)[0]
+    # Move to GPU if available
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model.to(device)
+    model.eval()
     
-    # convert LABEL_0, LABEL_1 etc to actual category names
+    # Tokenize input (no token_type_ids for DistilBERT)
+    inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=128)
+    
+    # Remove token_type_ids if present (DistilBERT doesn't use them)
+    if 'token_type_ids' in inputs:
+        del inputs['token_type_ids']
+    
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+    
+    # Run inference
+    with torch.no_grad():
+        outputs = model(**inputs)
+        probs = torch.nn.functional.softmax(outputs.logits, dim=-1)[0]
+    
+    # Get all predictions
     mapped_results = []
-    for r in results:
-        label_id = r['label'].replace('LABEL_', '')
-        cat_name = id2label.get(label_id, "unknown")
+    for idx, prob in enumerate(probs):
+        cat_name = id2label.get(str(idx), "unknown")
         mapped_results.append({
             "category": cat_name,
-            "confidence": r['score']
+            "confidence": float(prob)
         })
     
     # sort by confidence
