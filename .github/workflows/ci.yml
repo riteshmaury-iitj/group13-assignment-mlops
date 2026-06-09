@@ -21,7 +21,7 @@ jobs:
     
     - name: Install dependencies
       run: |
-        pip install transformers==4.46.0 torch scikit-learn pandas numpy
+        pip install transformers==4.46.0 torch scikit-learn pandas numpy requests
     
     - name: Check files exist
       run: |

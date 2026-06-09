@@ -21,7 +21,7 @@ jobs:
     
     - name: Install dependencies
       run: |
-        pip install transformers torch scikit-learn
+        pip install transformers torch scikit-learn pandas numpy
     
     - name: Run inference with default values
       run: |
