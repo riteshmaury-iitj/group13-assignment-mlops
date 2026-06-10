@@ -1,0 +1,33 @@
+Categories: ['World', 'Sports', 'Business', 'Sci/Tech']
+Model: YuvarajK-g25ait2054/ag-news-distilbert
+
+Model loaded from: https://huggingface.co/YuvarajK-g25ait2054/ag-news-distilbert
+Number of labels: 4
+Labels: {0: 'World', 1: 'Sports', 2: 'Business', 3: 'Sci/Tech'}
+Inference pipeline ready!
+================================================================================
+Demo — Custom Text Inference Results (inference.ipynb Cell 7)
+================================================================================
+
+Original:  The stock market surged today as investors reacted to positive earnings reports ...
+Cleaned:   the stock market surged today as investors reacted to positive earnings reports ...
+  Predicted : Sci/Tech (confidence: 0.5823)
+  All scores: Sci/Tech: 0.582, Business: 0.414, World: 0.004, Sports: 0.000
+
+Original:  NASA successfully launched a new satellite to study climate change patterns in t...
+Cleaned:   nasa successfully launched a new satellite to study climate change patterns in t...
+  Predicted : Sci/Tech (confidence: 0.9804)
+  All scores: Sci/Tech: 0.980, World: 0.018, Business: 0.001, Sports: 0.000
+
+Original:  Manchester United defeated Liverpool 3-1 in an exciting Premier League match at ...
+Cleaned:   manchester united defeated liverpool 31 in an exciting premier league match at o...
+  Predicted : Sports (confidence: 0.9981)
+  All scores: Sports: 0.998, World: 0.002, Business: 0.000, Sci/Tech: 0.000
+
+Original:  The United Nations Security Council held an emergency meeting to discuss the ong...
+Cleaned:   the united nations security council held an emergency meeting to discuss the ong...
+  Predicted : World (confidence: 0.9947)
+  All scores: World: 0.995, Sci/Tech: 0.003, Business: 0.002, Sports: 0.000
+
+================================================================================
+Saved to: inference_result.json
