@@ -22,6 +22,9 @@ COPY id2label.json .
 # Set environment variables
 ENV HF_HOME=/app/cache
 
-# Default command runs inference
+# Pre-download model into image so runtime needs no internet
+RUN python -c "import os; from transformers import AutoTokenizer, AutoModelForSequenceClassification; m=os.environ.get('MODEL_NAME','YuvarajK-g25ait2054/ag-news-distilbert'); print('Pre-downloading:',m); AutoTokenizer.from_pretrained(m); AutoModelForSequenceClassification.from_pretrained(m); print('Model cached!')"
+
+# Default: run all 4 notebook texts (inference.ipynb Cell 7 demo)
 ENTRYPOINT ["python", "inference.py"]
-CMD ["--text", "The stock market rallied today as tech companies reported strong earnings.", "--model", "YuvarajK-g25ait2054/ag-news-distilbert"]
+CMD ["--demo", "--model", "YuvarajK-g25ait2054/ag-news-distilbert"]

@@ -1,0 +1,24 @@
+{
+  "text": "NASA successfully launched a new satellite to study climate change patterns in the Arctic region.",
+  "cleaned_text": "nasa successfully launched a new satellite to study climate change patterns in the arctic region",
+  "prediction": "Sci/Tech",
+  "confidence": 0.9804,
+  "all_scores": [
+    {
+      "category": "Sci/Tech",
+      "confidence": 0.9804
+    },
+    {
+      "category": "World",
+      "confidence": 0.0181
+    },
+    {
+      "category": "Business",
+      "confidence": 0.0013
+    },
+    {
+      "category": "Sports",
+      "confidence": 0.0002
+    }
+  ]
+}
