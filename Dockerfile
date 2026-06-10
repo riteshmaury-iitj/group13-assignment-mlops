@@ -1,6 +1,10 @@
 # AG News Text Classification - Inference Container
 FROM python:3.10-slim
 
+# Accept HF model name as build argument with sensible default
+ARG MODEL_NAME="YuvarajK-g25ait2054/ag-news-distilbert"
+ENV MODEL_NAME=${MODEL_NAME}
+
 WORKDIR /app
 
 # Copy requirements first for better caching
