@@ -26,23 +26,23 @@ jobs:
     - name: Check required files exist
       run: |
         ls -la
-        test -f inference.py
-        test -f utils.py
-        test -f id2label.json
+        test -f src/inference.py
+        test -f src/utils.py
+        test -f data/id2label.json
         test -f Dockerfile
         test -f requirements.txt
         echo "All required files present"
 
     - name: Validate id2label.json
       run: |
-        python -c "import json; data = json.load(open('id2label.json')); assert len(data)==4; print('Labels OK:', data)"
+        python -c "import json; data = json.load(open('data/id2label.json')); assert len(data)==4; print('Labels OK:', data)"
 
     - name: Validate sample_data.json
       run: |
-        python -c "import json; data = json.load(open('sample_data.json')); print('sample_data.json OK')"
+        python -c "import json; data = json.load(open('data/sample_data.json')); print('sample_data.json OK')"
 
     - name: Check Python syntax
       run: |
-        python -m py_compile inference.py
-        python -m py_compile utils.py
+        python -m py_compile src/inference.py
+        python -m py_compile src/utils.py
         echo "Syntax check passed"

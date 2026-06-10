@@ -40,7 +40,7 @@ jobs:
       run: |
         echo "Running inference with default model and text..."
         for attempt in 1 2 3; do
-          python inference.py \
+          python src/inference.py \
             --text "${{ github.event.inputs.text || 'Stock market rallied today on strong earnings reports' }}" \
             --model "${{ github.event.inputs.model || 'YuvarajK-g25ait2054/ag-news-distilbert' }}" \
           && break
