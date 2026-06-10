@@ -1,6 +1,16 @@
 name: Manual Inference Test
 
 on:
+  workflow_dispatch:
+    inputs:
+      text:
+        description: 'Text to classify'
+        required: true
+        default: 'Stock market rallied today on strong earnings reports'
+      model:
+        description: 'HuggingFace model name'
+        required: true
+        default: 'YuvarajK-g25ait2054/ag-news-distilbert'
   push:
     branches: [develop, main]
   pull_request:
@@ -26,7 +36,9 @@ jobs:
     - name: Run inference with default values
       run: |
         echo "Running inference with default model and text..."
-        python inference.py --text "Stock market rallied today on strong earnings reports" --model "YuvarajK-g25ait2054/ag-news-distilbert"
+        python inference.py \
+          --text "${{ github.event.inputs.text || 'Stock market rallied today on strong earnings reports' }}" \
+          --model "${{ github.event.inputs.model || 'YuvarajK-g25ait2054/ag-news-distilbert' }}"
     
     - name: Show result
       run: |
