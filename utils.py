@@ -49,6 +49,11 @@ def create_pipeline(model_name="distilbert-base-uncased"):
     # same approach as inference.ipynb Step 3
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSequenceClassification.from_pretrained(model_name)
+
+    # DistilBERT does not use token_type_ids — remove it from tokenizer output
+    if hasattr(tokenizer, 'model_input_names') and 'token_type_ids' in tokenizer.model_input_names:
+        tokenizer.model_input_names = [x for x in tokenizer.model_input_names if x != 'token_type_ids']
+
     classifier = pipeline(
         "text-classification",
         model=model,
