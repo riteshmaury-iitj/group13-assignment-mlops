@@ -90,7 +90,7 @@ def main():
                 "all_scores": [{"category": p["label"], "confidence": round(float(p["score"]), 4)} for p in all_scores]
             })
         print("\n" + "=" * 80)
-        output_file = "inference_result.json"
+        output_file = "data/inference_result.json"
         with open(output_file, "w") as f:
             json.dump(all_results, f, indent=2)
         print(f"Saved to: {output_file}")
@@ -107,7 +107,7 @@ def main():
         score_str = ", ".join(f"{s['category']}: {s['confidence']:.3f}" for s in result['all_scores'])
         print(f"  All scores: {score_str}")
         print("=" * 80)
-        output_file = "inference_result.json"
+        output_file = "data/inference_result.json"
         with open(output_file, "w") as f:
             json.dump(result, f, indent=2)
         print(f"\nSaved to: {output_file}")
