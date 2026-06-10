@@ -2,7 +2,7 @@ import json
 import re
 import string
 import pandas as pd
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # utility functions for the project
 # task 3 stuff
@@ -44,22 +44,51 @@ def load_model_and_tokenizer(model_name="distilbert-base-uncased"):
     return model, tokenizer
 
 
-def create_pipeline(model_name="distilbert-base-uncased"):
-    # creates huggingface pipeline - handles device + token_type_ids automatically
-    # same approach as inference.ipynb Step 3
+def create_pipeline(model_name="YuvarajK-g25ait2054/ag-news-distilbert"):
+    # exactly matches inference.ipynb Cell 7 approach
+    # uses torch directly to avoid token_type_ids issue with DistilBERT
+    import torch
+    import torch.nn.functional as F
+
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSequenceClassification.from_pretrained(model_name)
+    model.eval()
 
-    # DistilBERT does not use token_type_ids — remove it from tokenizer output
-    if hasattr(tokenizer, 'model_input_names') and 'token_type_ids' in tokenizer.model_input_names:
-        tokenizer.model_input_names = [x for x in tokenizer.model_input_names if x != 'token_type_ids']
+    print(f"Model loaded from: https://huggingface.co/{model_name}")
+    print(f"Number of labels: {model.config.num_labels}")
+    print(f"Labels: {model.config.id2label}")
 
-    classifier = pipeline(
-        "text-classification",
-        model=model,
-        tokenizer=tokenizer,
-        top_k=None
-    )
+    def classifier(texts, truncation=True, max_length=128, **kwargs):
+        # accept str or list — same as pipeline(top_k=None)
+        single = isinstance(texts, str)
+        if single:
+            texts = [texts]
+
+        inputs = tokenizer(
+            texts,
+            truncation=truncation,
+            max_length=max_length,
+            padding=True,
+            return_tensors="pt"
+        )
+        # DistilBERT does not use token_type_ids — remove to avoid forward() error
+        inputs.pop("token_type_ids", None)
+
+        with torch.no_grad():
+            logits = model(**inputs).logits
+
+        probs = F.softmax(logits, dim=-1)
+
+        # return [[{label, score}, ...], ...] — same format as pipeline(top_k=None)
+        results = []
+        for row in probs:
+            scores = [
+                {"label": model.config.id2label[i], "score": float(row[i])}
+                for i in range(len(row))
+            ]
+            results.append(scores)
+        return results
+
     print("Inference pipeline ready!")
     return classifier
 
