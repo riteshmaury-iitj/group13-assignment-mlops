@@ -19,26 +19,30 @@ jobs:
       with:
         python-version: '3.10'
     
-    - name: Install dependencies
+    - name: Install dependencies (no heavy torch/transformers needed for CI checks)
       run: |
-        pip install transformers==4.46.0 torch scikit-learn pandas numpy requests
-    
-    - name: Check files exist
+        pip install pandas numpy requests
+
+    - name: Check required files exist
       run: |
         ls -la
         test -f inference.py
         test -f utils.py
         test -f id2label.json
-    
+        test -f Dockerfile
+        test -f requirements.txt
+        echo "All required files present"
+
     - name: Validate id2label.json
       run: |
-        python -c "import json; data = json.load(open('id2label.json')); print('Labels:', data)"
-    
-    - name: Test inference script syntax
+        python -c "import json; data = json.load(open('id2label.json')); assert len(data)==4; print('Labels OK:', data)"
+
+    - name: Validate sample_data.json
+      run: |
+        python -c "import json; data = json.load(open('sample_data.json')); print('sample_data.json OK')"
+
+    - name: Check Python syntax
       run: |
         python -m py_compile inference.py
         python -m py_compile utils.py
-    
-    - name: Run quick inference test
-      run: |
-        python inference.py --text "test article" --model "distilbert-base-uncased" || echo "Inference test skipped (model required)"
+        echo "Syntax check passed"
