@@ -15,8 +15,8 @@ Fine-tune **DistilBERT** on the **AG News** dataset (4-class text classification
 ## Results
 | Version | Learning Rate | Batch Size | Epochs | Accuracy | F1 Score |
 |---|---|---|---|---|---|
-| run-v1 (best) | 2e-5 | 16 | 3 | **94.25%** | **0.9425** |
-| run-v2 | 5e-5 | 64 | 2 | 94.12% | 0.9412 |
+| run-v1 (best) | 2e-5 | 16 | 3 | **94.34%** | **0.9434** |
+| run-v2 | 5e-5 | 64 | 5 | 94.12% | 0.9412 |
 
 ## Repository Structure
 ```
