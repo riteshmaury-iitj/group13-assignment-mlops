@@ -3,31 +3,51 @@
 ## Task
 Fine-tune **DistilBERT** on the **AG News** dataset (4-class text classification) with experiment tracking via Weights & Biases and model deployment to Hugging Face Hub.
 
-## Project Links
-| Resource | Link |
-|---|---|
-| GitHub Repo | [riteshmaury-iitj/group13-assignment-mlops](https://github.com/riteshmaury-iitj/group13-assignment-mlops) |
-| HuggingFace Model | [YuvarajK-g25ait2054/ag-news-distilbert](https://huggingface.co/YuvarajK-g25ait2054/ag-news-distilbert) |
-| Docker Image | [yuvarajkg25ait2054/ag-news-classifier](https://hub.docker.com/r/yuvarajkg25ait2054/ag-news-classifier) |
-| W&B Dashboard | [mlops-assignment3](https://wandb.ai/g25ait2054-iit-jodhpur/mlops-assignment3) |
-| Kaggle Notebook | [group13-ag-news-k](https://www.kaggle.com/code/kyuvarajg25ait2054/group13-ag-news-k) |
+## Dataset Overview
+
+The AG News dataset contains 120,000 training samples and 7,600 test samples across 4 balanced categories:
+- **World** (0) — International news and politics
+- **Sports** (1) — Sports news and events  
+- **Business** (2) — Business and financial news
+- **Sci/Tech** (3) — Science and technology news
+
+### Dataset Distribution
+<img width="1389" height="490" alt="image" src="https://github.com/user-attachments/assets/56815081-87a2-4a6b-a4e3-5952222c0538" />
+
+
+### Text Length Statistics
+<img width="1389" height="490" alt="image" src="https://github.com/user-attachments/assets/4b799148-c1cb-46fa-91a0-bdadc1260f37" />
+
+
+**Key Observations:**
+- ✅ **Perfectly balanced** — Each category has exactly 30,000 samples in train set and 1,900 in test set
+- ✅ **Similar text length** — Mean length ~225-226 characters across train and test
+- ✅ **Consistent distribution** — No class imbalance issues
+
 
 ## Results
-| Version | Learning Rate | Batch Size | Epochs | Accuracy | F1 Score |
-|---|---|---|---|---|---|
-| run-v1 (best) | 2e-5 | 16 | 3 | **94.34%** | **0.9434** |
-| run-v2 | 5e-5 | 64 | 5 | 94.12% | 0.9412 |
+| Learning Rate | Batch Size | Epochs | Accuracy | F1 Score |
+|---|---|---|---|---|
+| 2e-5 | 16 | 3 | **94.34%** | **0.9434** |
 
 ## Repository Structure
 ```
-├── prepare_data.ipynb          # Data inspection, cleaning, label encoding
-├── train_model.ipynb           # Training (Kaggle), W&B tracking, HF push
-├── inference.py                # CLI inference script
-├── utils.py                    # Model loading utilities
+├── src/
+│   ├── inference.py            # CLI inference script
+│   └── utils.py                # Model loading utilities
+├── data/
+│   ├── id2label.json           # Label mapping (0→World, 1→Sports, 2→Business, 3→Sci/Tech)
+│   ├── sample_data.json        # Sample test inputs
+│   └── inference_result.json   # Output from inference runs
+├── notebooks/
+│   ├── prepare_data.ipynb      # Data inspection, cleaning, label encoding
+│   ├── train_model.ipynb       # Training (Kaggle), W&B tracking, HF push
+│   ├── model_inference.ipynb   # Model inference demonstration
+│   └── __notebook__.ipynb      # Notebook template
 ├── Dockerfile                  # Docker container for inference
 ├── requirements.txt            # Python dependencies
-├── id2label.json               # Label mapping (0→World, 1→Sports, 2→Business, 3→Sci/Tech)
-├── sample_data.json            # Sample test inputs
+├── README.md                   # This file
+├── LICENSE                     # License
 └── .github/workflows/
     ├── ci.yml                  # CI pipeline (runs on push/PR)
     └── inference.yml           # Inference workflow (runs on push/PR)
@@ -37,20 +57,50 @@ Fine-tune **DistilBERT** on the **AG News** dataset (4-class text classification
 
 ### Run inference with Docker
 ```bash
-docker pull yuvarajkg25ait2054/ag-news-classifier:latest
-docker run yuvarajkg25ait2054/ag-news-classifier:latest \
+docker pull <your-docker-username>/ag-news-classifier:latest
+docker run <your-docker-username>/ag-news-classifier:latest \
   --text "Stock market rises on strong earnings" \
-  --model "YuvarajK-g25ait2054/ag-news-distilbert"
+  --model "<your-hf-username>/ag-news-distilbert"
 ```
 
 ### Run inference locally
 ```bash
 pip install -r requirements.txt
-python inference.py --text "NASA launches new Mars mission" \
-  --model "YuvarajK-g25ait2054/ag-news-distilbert"
+python src/inference.py --text "NASA launches new Mars mission" \
+  --model "<your-hf-username>/ag-news-distilbert"
 ```
 
-## Kaggle Secrets Required
+### Run demo (all 4 sample texts)
+```bash
+python src/inference.py --demo \
+  --model "<your-hf-username>/ag-news-distilbert"
+```
+
+## Project Structure
+
+This project follows a clean architecture with organized directories:
+
+- **`src/`** — Production code for inference
+  - `inference.py` — Main CLI script for text classification
+  - `utils.py` — Utility functions (text cleaning, model loading, label mapping)
+
+- **`data/`** — Data files and outputs
+  - `id2label.json` — Label mapping for the 4 AG News categories
+  - `sample_data.json` — Sample input texts for testing
+  - `inference_result.json` — Generated output from inference runs
+
+- **`notebooks/`** — Jupyter notebooks for development and training
+  - Training, data preparation, and inference demonstrations
+
+- **`Dockerfile`** — Container configuration for deployment
+  - Pre-downloads model to eliminate internet dependency at runtime
+
+- **`docs/`** — Documentation and visualizations
+  - Dataset distribution and text length analysis charts
+  - Model card documentation
+
+
+These charts are generated by the `prepare_data.ipynb` notebook during data exploration.
 | Secret | Source |
 |---|---|
 | `wb_key` | [wandb.ai/authorize](https://wandb.ai/authorize) |
