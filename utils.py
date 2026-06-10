@@ -102,8 +102,32 @@ def load_label_mapping(label_file="id2label.json"):
 
 
 if __name__ == "__main__":
-    # testing
+    # exact 4 texts from inference.ipynb Cell 7
+    custom_texts = [
+        "The stock market surged today as investors reacted to positive earnings reports from major tech companies.",
+        "NASA successfully launched a new satellite to study climate change patterns in the Arctic region.",
+        "Manchester United defeated Liverpool 3-1 in an exciting Premier League match at Old Trafford.",
+        "The United Nations Security Council held an emergency meeting to discuss the ongoing conflict in the region."
+    ]
+
     labels = load_label_mapping()
-    print(labels)
-    print("total classes:", len(labels))
-    print("clean_text test:", clean_text("Stock market <b>RISES</b>! http://test.com"))
+    print("Label mapping:", labels)
+    print("Total classes:", len(labels))
+    print()
+
+    classifier = create_pipeline("YuvarajK-g25ait2054/ag-news-distilbert")
+
+    custom_texts_cleaned = [clean_text(t) for t in custom_texts]
+    results = classifier(custom_texts_cleaned, truncation=True, max_length=128)
+
+    print("\nCustom Text Inference Results:")
+    print("=" * 80)
+    for text, cleaned, pred in zip(custom_texts, custom_texts_cleaned, results):
+        top_pred = max(pred, key=lambda x: x["score"])
+        all_scores = sorted(pred, key=lambda x: x["score"], reverse=True)
+        print(f"Original:  {text[:80]}...")
+        print(f"Cleaned:   {cleaned[:80]}...")
+        print(f"  Predicted: {top_pred['label']} (confidence: {top_pred['score']:.4f})")
+        score_str = ", ".join([f"{p['label']}: {p['score']:.4f}" for p in all_scores])
+        print(f"  All scores: {score_str}")
+        print()
