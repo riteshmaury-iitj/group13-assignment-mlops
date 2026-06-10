@@ -93,7 +93,7 @@ def create_pipeline(model_name="YuvarajK-g25ait2054/ag-news-distilbert"):
     return classifier
 
 
-def load_label_mapping(label_file="id2label.json"):
+def load_label_mapping(label_file="data/id2label.json"):
     # load the json file with label mappings
     f = open(label_file, "r")
     id2label = json.load(f)

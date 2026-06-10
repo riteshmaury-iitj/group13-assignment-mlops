@@ -51,7 +51,7 @@ def main():
     parser.add_argument("--model", type=str,
                         default="YuvarajK-g25ait2054/ag-news-distilbert",
                         help="HuggingFace model name")
-    parser.add_argument("--labels", type=str, default="id2label.json",
+    parser.add_argument("--labels", type=str, default="data/id2label.json",
                         help="Path to id2label.json")
     args = parser.parse_args()
 
