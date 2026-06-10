@@ -19,7 +19,10 @@ on:
 jobs:
   inference:
     runs-on: ubuntu-latest
-    
+    env:
+      HF_HUB_TIMEOUT: "120"
+      TRANSFORMERS_TIMEOUT: "120"
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -33,12 +36,17 @@ jobs:
       run: |
         pip install transformers torch scikit-learn pandas numpy
     
-    - name: Run inference with default values
+    - name: Run inference with default values (with retry)
       run: |
         echo "Running inference with default model and text..."
-        python inference.py \
-          --text "${{ github.event.inputs.text || 'Stock market rallied today on strong earnings reports' }}" \
-          --model "${{ github.event.inputs.model || 'YuvarajK-g25ait2054/ag-news-distilbert' }}"
+        for attempt in 1 2 3; do
+          python inference.py \
+            --text "${{ github.event.inputs.text || 'Stock market rallied today on strong earnings reports' }}" \
+            --model "${{ github.event.inputs.model || 'YuvarajK-g25ait2054/ag-news-distilbert' }}" \
+          && break
+          echo "Attempt $attempt failed, retrying in 20s..."
+          sleep 20
+        done
     
     - name: Show result
       run: |
