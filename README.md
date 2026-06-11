@@ -30,7 +30,7 @@ The AG News dataset contains 120,000 training samples and 7,600 test samples acr
 |---|---|---|---|---|
 | 2e-5 | 16 | 3 | **94.34%** | **0.9434** |
 
-## Repository Structure
+## Repository Structure 
 ```
 ├── src/
 │   ├── inference.py            # CLI inference script
@@ -63,7 +63,7 @@ docker run <your-docker-username>/ag-news-classifier:latest \
   --model "<your-hf-username>/ag-news-distilbert"
 ```
 
-### Run inference locally
+### Run inference locally 
 ```bash
 pip install -r requirements.txt
 python src/inference.py --text "NASA launches new Mars mission" \
