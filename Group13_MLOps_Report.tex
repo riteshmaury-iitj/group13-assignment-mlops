@@ -119,7 +119,7 @@ Guntakal Sandeep Kumar     & G25AIT2036 & W\&B Tracking, Evaluation, Testing \\
 \textbf{Member} & \textbf{GitHub} & \textbf{Kaggle} & \textbf{HuggingFace} & \textbf{W\&B} \\
 \midrule
 Ritesh Maury \newline G25AIT2087 &
-  \href{https://github.com/riteshmaury-iitj}{\small riteshmaury-iitj} &
+  \href{https://github.com/riteshmaury-iitj/group13-assignment-mlops}{\small riteshmaury-iitj} &
   {\small ---} & {\small ---} & {\small ---} \\
 Kosuru Yuvaraj \newline G25AIT2054 &
   \href{https://github.com/yuvarajkosuru}{\small yuvarajkosuru} &
@@ -127,9 +127,15 @@ Kosuru Yuvaraj \newline G25AIT2054 &
   \href{https://huggingface.co/YuvarajK-g25ait2054}{\small YuvarajK-g25ait2054} &
   \href{https://wandb.ai/g25ait2054-iit-jodhpur}{\small g25ait2054} \\
 Laishram K. Chanu \newline G25AIT2056 &
-  {\small ---} & {\small ---} & {\small ---} & {\small ---} \\
+  \href{https://github.com/riteshmaury-iitj/group13-assignment-mlops}{\small group13-mlops} &
+  \href{https://www.kaggle.com/code/khumanleima/notebook35f6cea6a6}{\small khumanleima} &
+  \href{https://huggingface.co/LKHUMANLEIMA/ag-news-distilbert}{\small LKHUMANLEIMA} &
+  \href{https://wandb.ai/g25ait2056-indian-institute-of-technology-jodhpur/mlops-assignment3}{\small g25ait2056} \\
 Guntakal Sandeep \newline G25AIT2036 &
-  {\small ---} & {\small ---} & {\small ---} & {\small ---} \\
+  \href{https://github.com/riteshmaury-iitj/group13-assignment-mlops/tree/Sandeep\_dev}{\small Sandeep\_dev} &
+  \href{https://www.kaggle.com/code/guntakalsandeepkumar/g25ait2036}{\small guntakalsandeep} &
+  \href{https://huggingface.co/guntaksa/AG-News-distilbert1}{\small guntaksa} &
+  \href{https://wandb.ai/g25ait2036-indian-institue-of-technology-jodhpur/mlops-assignment3}{\small g25ait2036} \\
 \bottomrule
 \end{tabular}
 
@@ -175,8 +181,8 @@ Repository \href{https://github.com/riteshmaury-iitj/group13-assignment-mlops}{\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{screenshots/whatsapp_1.jpeg}
-\caption{GitHub Settings --- Collaborators showing team members}
+\includegraphics[width=0.85\textwidth]{screenshots/github_collaborators.png}
+\caption{GitHub Settings --- Collaborators: g25ait2036, g25ait2056-beep, YuvarajK-g25ait2054}
 \end{figure}
 
 \subsection{Task 2 --- Data Preparation \& Normalisation [15 marks]}
@@ -187,6 +193,18 @@ Dataset: \texttt{ag\_news} from HuggingFace (120,000 train / 7,600 test, 4 balan
   \item Label mapping saved to \texttt{id2label.json}: \texttt{\{0: World, 1: Sports, 2: Business, 3: Sci/Tech\}}.
   \item Tokenized with \texttt{max\_length=128}.
 \end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{screenshots/label_dist.png}
+\caption{Test set label distribution --- 4 balanced classes, 1,900 samples each (7,600 total)}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{screenshots/length_dist.png}
+\caption{Test set text length distribution --- word count per class (mean: 64 words, max: 200)}
+\end{figure}
 
 \subsection{Task 3 --- Model Selection [10 marks]}
 
@@ -306,6 +324,12 @@ docker run --rm yuvarajkg25ait2054/ag-news-classifier:latest \
 \caption{Docker container --- demo mode classifying all 4 sample texts}
 \end{figure}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{screenshots/Docker_execution.png}
+\caption{Docker container --- terminal output showing inference results for all 4 categories}
+\end{figure}
+
 \subsection{Task 7 --- GitHub Actions Workflows [15 marks]}
 
 Two workflows under \texttt{.github/workflows/}:
@@ -319,7 +343,7 @@ Both workflows pass with green checkmarks.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{screenshots/whatsapp_2.jpeg}
+\includegraphics[width=0.85\textwidth]{screenshots/CICD.png}
 \caption{GitHub Actions --- CI Pipeline and Inference workflow with green checkmarks}
 \end{figure}
 
